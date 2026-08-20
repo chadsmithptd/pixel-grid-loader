@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "name": "pixel-grid-loader",
+    "description": "A pixel-grid loading indicator for long-running work: an animated 3x3 grid with a shimmering label and a live elapsed timer, in four variants (Drive, Dots, Orbit, Surfer).",
+    "keywords": ["loader", "loading", "spinner", "progress", "status", "elapsed timer"],
+    "features": [
+      "Four animated variants: Drive (chevron wavefront, square cells), Dots (chevron wavefront, round cells), Orbit (comet lapping the grid), Surfer (Drive loader plus a looping video card)",
+      "Shimmering gradient label text, defaults to 'Churning' (or 'Subway surfing' for Surfer) when no label is set",
+      "Live elapsed timer in monospace tabular figures, updates every 100ms",
+      "Respects prefers-reduced-motion by freezing the grid animation while the timer keeps ticking",
+      "Surfer variant falls back to a mini loader with 'Video unavailable' text if the video fails to load"
+    ],
+    "inherit": []
+  },
+  "properties": [
+    { "name": "label", "description": "Text shown next to the animated grid. Empty string falls back to the variant's default label.", "type": "string", "defaultValue": "" },
+    { "name": "variant", "description": "Which loader animation to render: Drive, Dots, Orbit, or Surfer.", "type": "string", "defaultValue": "Drive" },
+    { "name": "videoSrc", "description": "URL of the looping video shown under the label, only used when variant is Surfer.", "type": "string", "defaultValue": "" }
+  ],
+  "states": [],
+  "events": [],
+  "localContext": [],
+  "actions": [],
+  "slots": [],
+  "variables": [],
+  "specifications": [
+    "Root element has no fixed width/height; it sizes to its content (fit-content).",
+    "The Surfer variant renders a 224px-wide video card below the status row; other variants render only the status row.",
+    "Elapsed timer starts on mount and keeps counting for the component's lifetime; it does not accept an external start time.",
+    "The grid animation pauses while the component is being edited in the WeWeb editor; the elapsed timer also pauses during editing.",
+    "Colors are hardcoded (near-black label/grid, gray secondary text) rather than pulled from the project's design system."
+  ],
+  "examples": [
+    { "description": "Default Drive loader", "example": "{\"variant\": \"Drive\"}" },
+    { "description": "Surfer loader with a custom video", "example": "{\"variant\": \"Surfer\", \"label\": \"Hang on\", \"videoSrc\": \"https://example.com/loop.mp4\"}" }
+  ],
+  "dependencies": []
+}
