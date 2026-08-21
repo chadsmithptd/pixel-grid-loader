@@ -15,20 +15,28 @@
   "properties": [
     { "name": "label", "description": "Text shown next to the animated grid. Empty string falls back to the variant's default label.", "type": "string", "defaultValue": "" },
     { "name": "variant", "description": "Which loader animation to render: Drive, Dots, Orbit, or Surfer.", "type": "string", "defaultValue": "Drive" },
-    { "name": "videoSrc", "description": "URL of the looping video shown under the label, only used when variant is Surfer.", "type": "string", "defaultValue": "" }
+    { "name": "videoSrc", "description": "URL of the looping video shown under the label, only used when variant is Surfer.", "type": "string", "defaultValue": "" },
+    { "name": "showDots", "description": "Show or hide the animated grid, keeping the label and elapsed timer visible.", "type": "boolean", "defaultValue": true },
+    { "name": "dotColor", "description": "Primary color: grid dots and the darkest point of the label shimmer.", "type": "string", "defaultValue": "#18181b" },
+    { "name": "mutedColor", "description": "Secondary color: elapsed timer text and the lightest points of the label shimmer.", "type": "string", "defaultValue": "#a1a1aa" },
+    { "name": "autoStart", "description": "Start the elapsed timer automatically on mount. Turn off to control it via the Start/Stop/Reset actions instead.", "type": "boolean", "defaultValue": true }
   ],
   "states": [],
   "events": [],
   "localContext": [],
-  "actions": [],
+  "actions": [
+    { "label": "Start timer", "actionName": "startTimer", "description": "Resumes counting from the current elapsed value. No-op if already running.", "args": [] },
+    { "label": "Stop timer", "actionName": "stopTimer", "description": "Pauses the elapsed timer without resetting its value.", "args": [] },
+    { "label": "Reset timer", "actionName": "resetTimer", "description": "Sets the elapsed value back to 0s without changing whether it's running.", "args": [] }
+  ],
   "slots": [],
   "variables": [],
   "specifications": [
     "Root element has no fixed width/height; it sizes to its content (fit-content).",
     "The Surfer variant renders a 224px-wide video card below the status row; other variants render only the status row.",
-    "Elapsed timer starts on mount and keeps counting for the component's lifetime; it does not accept an external start time.",
+    "With autoStart on (default), the elapsed timer starts on mount. With autoStart off, it stays at 0s until the Start action is called from a workflow.",
     "The grid animation pauses while the component is being edited in the WeWeb editor; the elapsed timer also pauses during editing.",
-    "Colors are hardcoded (near-black label/grid, gray secondary text) rather than pulled from the project's design system."
+    "dotColor and mutedColor are the only two theme colors: they drive the grid dots, the label shimmer gradient, and the elapsed/fallback text."
   ],
   "examples": [
     { "description": "Default Drive loader", "example": "{\"variant\": \"Drive\"}" },

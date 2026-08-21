@@ -1,7 +1,7 @@
 <template>
-  <div class="pgl-root" :class="{ 'pgl-root--surfer': isSurfer }" role="status">
+  <div class="pgl-root" :class="{ 'pgl-root--surfer': isSurfer }" :style="rootStyle" role="status">
     <div class="pgl-row">
-      <span class="pgl-grid" aria-hidden="true">
+      <span v-if="showDots" class="pgl-grid" aria-hidden="true">
         <span
           v-for="(delay, index) in pattern.delays"
           :key="index"
@@ -112,6 +112,15 @@ export default {
       const seconds = (total % 60).toFixed(1);
       return `${minutes}m ${seconds}s`;
     },
+    showDots() {
+      return this.content?.showDots !== false;
+    },
+    rootStyle() {
+      return {
+        "--pgl-dot": this.content?.dotColor || "#18181b",
+        "--pgl-muted": this.content?.mutedColor || "#a1a1aa",
+      };
+    },
   },
   watch: {
     "content.videoSrc"() {
@@ -119,14 +128,14 @@ export default {
     },
   },
   mounted() {
-    this.startTimer();
+    if (this.content?.autoStart !== false) this.startTimer();
   },
   beforeUnmount() {
     this.stopTimer();
   },
   methods: {
     startTimer() {
-      this.stopTimer();
+      if (this.timer) return;
       this.timer = setInterval(() => {
         if (this.isEditing) return;
         this.deciseconds += 1;
@@ -137,6 +146,9 @@ export default {
         clearInterval(this.timer);
         this.timer = null;
       }
+    },
+    resetTimer() {
+      this.deciseconds = 0;
     },
     cellStyle(delay, durationOverride) {
       const dur = durationOverride ?? this.pattern.dur;
@@ -180,7 +192,7 @@ export default {
   width: 4px;
   height: 4px;
   border-radius: 1px;
-  background: currentColor;
+  background: var(--pgl-dot, #18181b);
 }
 
 .pgl-cell--round {
@@ -190,7 +202,12 @@ export default {
 .pgl-label {
   font-size: 13px;
   font-weight: 500;
-  background-image: linear-gradient(90deg, #a1a1aa 35%, #18181b 50%, #a1a1aa 65%);
+  background-image: linear-gradient(
+    90deg,
+    var(--pgl-muted, #a1a1aa) 35%,
+    var(--pgl-dot, #18181b) 50%,
+    var(--pgl-muted, #a1a1aa) 65%
+  );
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -201,7 +218,7 @@ export default {
 .pgl-elapsed {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
-  color: #71717a;
+  color: var(--pgl-muted, #a1a1aa);
   font-variant-numeric: tabular-nums;
 }
 
@@ -236,7 +253,7 @@ export default {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  color: #a1a1aa;
+  color: var(--pgl-muted, #a1a1aa);
 }
 
 .pgl-card-fallback-text {
