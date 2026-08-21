@@ -6,7 +6,8 @@
     "features": [
       "Four animated variants: Drive (chevron wavefront, square cells), Dots (chevron wavefront, round cells), Orbit (comet lapping the grid), Surfer (Drive loader plus a looping video card)",
       "Shimmering gradient label text, defaults to 'Churning' (or 'Subway surfing' for Surfer) when no label is set",
-      "Live elapsed timer in monospace tabular figures, updates every 100ms",
+      "Live elapsed timer in whole seconds, monospace tabular figures, updates every second",
+      "Adjustable animation speed multiplier covering the grid wavefront and the label shimmer",
       "Respects prefers-reduced-motion by freezing the grid animation while the timer keeps ticking",
       "Surfer variant falls back to a mini loader with 'Video unavailable' text if the video fails to load"
     ],
@@ -19,6 +20,7 @@
     { "name": "showDots", "description": "Show or hide the animated grid, keeping the label and elapsed timer visible.", "type": "boolean", "defaultValue": true },
     { "name": "dotColor", "description": "Primary color: grid dots and the darkest point of the label shimmer.", "type": "string", "defaultValue": "#18181b" },
     { "name": "mutedColor", "description": "Secondary color: elapsed timer text and the lightest points of the label shimmer.", "type": "string", "defaultValue": "#a1a1aa" },
+    { "name": "speed", "description": "Speed multiplier for the grid animation and label shimmer. 1 is normal, 2 is twice as fast, 0.5 is half speed.", "type": "number", "defaultValue": 1 },
     { "name": "autoStart", "description": "Start the elapsed timer automatically on mount. Turn off to control it via the Start/Stop/Reset actions instead.", "type": "boolean", "defaultValue": true }
   ],
   "states": [],

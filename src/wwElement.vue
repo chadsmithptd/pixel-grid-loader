@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       patterns: PATTERNS,
-      deciseconds: 0,
+      seconds: 0,
       timer: null,
       videoOk: true,
     };
@@ -106,19 +106,23 @@ export default {
       return this.isSurfer ? "Subway surfing" : "Churning";
     },
     elapsedText() {
-      const total = this.deciseconds / 10;
-      if (total < 60) return `${total.toFixed(1)}s`;
-      const minutes = Math.floor(total / 60);
-      const seconds = (total % 60).toFixed(1);
+      if (this.seconds < 60) return `${this.seconds}s`;
+      const minutes = Math.floor(this.seconds / 60);
+      const seconds = this.seconds % 60;
       return `${minutes}m ${seconds}s`;
     },
     showDots() {
       return this.content?.showDots !== false;
     },
+    speed() {
+      const value = Number(this.content?.speed);
+      return value > 0 ? value : 1;
+    },
     rootStyle() {
       return {
         "--pgl-dot": this.content?.dotColor || "#18181b",
         "--pgl-muted": this.content?.mutedColor || "#a1a1aa",
+        "--pgl-speed": this.speed,
       };
     },
   },
@@ -138,8 +142,8 @@ export default {
       if (this.timer) return;
       this.timer = setInterval(() => {
         if (this.isEditing) return;
-        this.deciseconds += 1;
-      }, 100);
+        this.seconds += 1;
+      }, 1000);
     },
     stopTimer() {
       if (this.timer) {
@@ -148,13 +152,15 @@ export default {
       }
     },
     resetTimer() {
-      this.deciseconds = 0;
+      this.seconds = 0;
     },
     cellStyle(delay, durationOverride) {
-      const dur = durationOverride ?? this.pattern.dur;
+      const baseDur = durationOverride ?? this.pattern.dur;
+      const dur = Math.round(baseDur / this.speed);
+      const delayMs = delay === null ? null : Math.round(delay / this.speed);
       return {
         opacity: delay === null ? 0.07 : 0.15,
-        animation: delay === null ? "none" : `pgl-pixel-on ${dur}ms ease-in-out ${delay}ms infinite`,
+        animation: delay === null ? "none" : `pgl-pixel-on ${dur}ms ease-in-out ${delayMs}ms infinite`,
       };
     },
   },
@@ -212,7 +218,7 @@ export default {
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  animation: pgl-shimmer-text 1.4s linear infinite;
+  animation: pgl-shimmer-text calc(1.4s / var(--pgl-speed, 1)) linear infinite;
 }
 
 .pgl-elapsed {

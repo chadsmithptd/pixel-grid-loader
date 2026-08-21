@@ -129,6 +129,29 @@ export default {
       },
       /* wwEditor:end */
     },
+    speed: {
+      label: {
+        en: "Speed",
+      },
+      type: "Number",
+      bindable: true,
+      section: "style",
+      defaultValue: 1,
+      options: {
+        min: 0.25,
+        max: 4,
+        step: 0.25,
+      },
+      /* wwEditor:start */
+      bindingValidation: {
+        type: "number",
+        tooltip: "A multiplier: 1 is normal speed, 2 is twice as fast, 0.5 is half speed.",
+      },
+      propertyHelp: {
+        tooltip: "Speed multiplier for the grid animation and the label shimmer. Higher is faster.",
+      },
+      /* wwEditor:end */
+    },
     autoStart: {
       label: {
         en: "Auto start",
